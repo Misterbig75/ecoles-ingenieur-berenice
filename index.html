@@ -1,1 +1,84 @@
-FULL_CONTENT_HERE
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecoles d’Ingénieur PostBac</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a5f7a">
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background:#f8f9fa; color:#222; margin:0; line-height:1.45; }
+header { background: linear-gradient(135deg,#1a5f7a,#2e8b57); color:white; padding:1rem; position:sticky; top:0; z-index:10; }
+header h1 { margin:0; font-size:1.2rem; }
+nav { background:white; padding:0.6rem 1rem; border-bottom:1px solid #ddd; position:sticky; top:52px; z-index:9; display:flex; gap:1rem; }
+nav a { color:#1a5f7a; text-decoration:none; font-weight:500; }
+section { padding:1rem; }
+.card { background:white; border-radius:12px; padding:1rem; margin-bottom:0.8rem; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+details { background:white; border-radius:12px; margin-bottom:0.6rem; box-shadow:0 1px 3px rgba(0,0,0,0.07); }
+summary { padding:0.8rem 1rem; font-weight:600; color:#1a5f7a; cursor:pointer; }
+.details-content { padding:0 1rem 0.8rem; font-size:0.9rem; }
+.meta { font-size:0.8rem; color:#666; }
+h2 { color:#1a5f7a; }
+</style>
+</head>
+<body>
+<header><h1>Ecoles d’Ingénieur PostBac</h1></header>
+<nav>
+  <a href="#tour">Tour d’horizon</a>
+  <a href="#selection">Sélection</a>
+  <a href="#ecoles">Écoles</a>
+</nav>
+<section id="tour">
+  <div class="card">
+    <h2>Tour d’horizon</h2>
+    <p>Environ 100 écoles délivrent un diplôme d’ingénieur habilité CTI accessible directement après le bac (5 ans).</p>
+    <p>Principaux réseaux : INSA, Universités de Technologie, Geipi Polytech, Puissance Alpha, Avenir, Advance.</p>
+  </div>
+</section>
+<section id="selection">
+  <div class="card">
+    <h2>Sélection & Parcoursup</h2>
+    <p>Candidature principale via <strong>Parcoursup</strong>.</p>
+    <ul>
+      <li>Procédure INSA</li>
+      <li>Geipi Polytech</li>
+      <li>Avenir</li>
+      <li>Puissance Alpha</li>
+      <li>Advance</li>
+    </ul>
+    <p>Roadmap : Janvier (vœux) → Mars (confirmation) → Avril-Mai (épreuves) → Juin-Juillet (propositions).</p>
+  </div>
+</section>
+<section id="ecoles">
+  <h2>Écoles</h2>
+  <p>Appuie sur une école pour voir les détails (version avec quelques exemples, la liste complète arrive).</p>
+  <details>
+    <summary>INSA Lyon <span class="meta">• Lyon • INSA</span></summary>
+    <div class="details-content">
+      <p><strong>Nom complet :</strong> Institut National des Sciences Appliquées de Lyon</p>
+      <p><strong>Adresse :</strong> 20 Avenue Albert Einstein, 69621 Villeurbanne</p>
+      <p><strong>Spécialités :</strong> Génie civil, Informatique, Biosciences, etc.</p>
+      <p><strong>Notes :</strong> Très sélective, prépa intégrée.</p>
+      <p><strong>Site :</strong> <a href="https://www.insa-lyon.fr" target="_blank">https://www.insa-lyon.fr</a></p>
+    </div>
+  </details>
+  <details>
+    <summary>UTC <span class="meta">• Compiègne • UT</span></summary>
+    <div class="details-content">
+      <p><strong>Nom complet :</strong> Université de Technologie de Compiègne</p>
+      <p><strong>Adresse :</strong> Rue du Docteur Schweitzer, 60200 Compiègne</p>
+      <p><strong>Spécialités :</strong> Génie biologique, Informatique, Mécanique...</p>
+      <p><strong>Site :</strong> <a href="https://www.utc.fr" target="_blank">https://www.utc.fr</a></p>
+    </div>
+  </details>
+  <details>
+    <summary>Polytech Paris-Saclay <span class="meta">• Paris • Geipi Polytech</span></summary>
+    <div class="details-content">
+      <p><strong>Nom complet :</strong> École polytechnique de l'Université Paris-Saclay</p>
+      <p><strong>Spécialités :</strong> Informatique, Matériaux, Électronique...</p>
+      <p><strong>Site :</strong> <a href="https://www.polytech.universite-paris-saclay.fr" target="_blank">https://www.polytech.universite-paris-saclay.fr</a></p>
+    </div>
+  </details>
+</section>
+</body>
+</html>
