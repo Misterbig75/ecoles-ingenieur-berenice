@@ -1,1 +1,97 @@
-PLACEHOLDER_TO_BE_REPLACED_WITH_FULL
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Ecoles d’Ingénieur PostBac</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ecoles PostBac">
+<meta name="theme-color" content="#1a5f7a">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f8f9fa; color: #222; line-height: 1.45; padding-bottom: 65px; }
+header { background: linear-gradient(135deg, #1a5f7a 0%, #2e8b57 100%); color: white; padding: 0.8rem 1rem; position: sticky; top: 0; z-index: 100; }
+header h1 { font-size: 1.15rem; font-weight: 600; }
+.tabs { display: flex; background: white; border-bottom: 1px solid #e0e0e0; position: sticky; top: 48px; z-index: 99; }
+.tab { flex: 1; text-align: center; padding: 0.65rem 0.2rem; font-size: 0.78rem; font-weight: 500; color: #666; border: none; background: none; }
+.tab.active { color: #1a5f7a; border-bottom: 3px solid #1a5f7a; }
+.section { display: none; padding: 0.75rem; }
+.section.active { display: block; }
+.card { background: white; border-radius: 12px; padding: 0.9rem; margin-bottom: 0.7rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card h2 { font-size: 1.02rem; color: #1a5f7a; margin-bottom: 0.35rem; }
+ul { margin-left: 1.1rem; font-size: 0.88rem; }
+.nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; border-top: 1px solid #e0e0e0; z-index: 100; }
+.nav button { flex: 1; background: none; border: none; padding: 0.45rem 0; font-size: 0.68rem; color: #666; }
+.nav button.active { color: #1a5f7a; font-weight: 600; }
+</style>
+</head>
+<body>
+<header><h1>Ecoles d’Ingénieur PostBac</h1></header>
+<div class="tabs">
+  <button class="tab active" data-section="overview">Tour d’horizon</button>
+  <button class="tab" data-section="selection">Sélection</button>
+  <button class="tab" data-section="schools">Écoles</button>
+</div>
+<div id="overview" class="section active">
+  <div class="card">
+    <h2>Les écoles d’ingénieurs post-Bac CTI</h2>
+    <p>Environ 100 écoles délivrent un diplôme d’ingénieur habilité CTI accessible directement après le bac (5 ans).</p>
+  </div>
+  <div class="card">
+    <h2>Principaux réseaux</h2>
+    <ul>
+      <li><strong>INSA</strong> (7 écoles)</li>
+      <li><strong>Universités de Technologie</strong> (UTC, UTT, UTBM)</li>
+      <li><strong>Geipi Polytech</strong> (~35 écoles)</li>
+      <li><strong>Puissance Alpha</strong></li>
+      <li><strong>Avenir</strong></li>
+      <li><strong>Advance</strong> (EPITA…)</li>
+    </ul>
+  </div>
+</div>
+<div id="selection" class="section">
+  <div class="card">
+    <h2>Parcoursup & Concours</h2>
+    <p>Candidature principale via <strong>Parcoursup</strong>.</p>
+    <ul>
+      <li>Procédure INSA</li>
+      <li>Geipi Polytech</li>
+      <li>Avenir</li>
+      <li>Puissance Alpha</li>
+      <li>Advance</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h2>Roadmap indicative</h2>
+    <ul>
+      <li>Janvier : ouverture Parcoursup + vœux</li>
+      <li>Mars : confirmation des vœux</li>
+      <li>Avril-Mai : épreuves</li>
+      <li>Juin-Juillet : propositions</li>
+    </ul>
+  </div>
+</div>
+<div id="schools" class="section">
+  <div class="card">
+    <h2>Liste des écoles</h2>
+    <p>Version de test de navigation. La liste complète avec filtres et détails sera ajoutée dès que la navigation est confirmée fonctionnelle.</p>
+  </div>
+</div>
+<div class="nav">
+  <button class="active" data-section="overview">📊 Tour</button>
+  <button data-section="selection">📋 Sélection</button>
+  <button data-section="schools">🏫 Écoles</button>
+</div>
+<script>
+document.querySelectorAll(".tab, .nav button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const section = btn.dataset.section;
+    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+    document.querySelectorAll(".tab, .nav button").forEach(b => b.classList.remove("active"));
+    document.getElementById(section).classList.add("active");
+    document.querySelectorAll(`[data-section="${section}"]`).forEach(b => b.classList.add("active"));
+  });
+});
+</script>
+</body>
+</html>
