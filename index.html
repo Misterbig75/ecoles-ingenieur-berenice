@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Ecoles d’Ingénieur PostBac</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ecoles PostBac">
 <meta name="theme-color" content="#1a5f7a">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,7 +20,9 @@ header h1 { font-size: 1.2rem; font-weight: 600; }
 .card { background: white; border-radius: 12px; padding: 0.95rem; margin-bottom: 0.75rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
 .card h2 { font-size: 1.05rem; color: #1a5f7a; margin-bottom: 0.35rem; }
 ul { margin-left: 1.1rem; font-size: 0.88rem; }
-.filters { display: flex; gap: 0.35rem; overflow-x: auto; padding-bottom: 0.4rem; margin-bottom: 0.5rem; }
+.search-bar { margin-bottom: 0.7rem; }
+.search-bar input { width: 100%; padding: 0.65rem 0.9rem; border: 1px solid #ddd; border-radius: 20px; font-size: 0.92rem; }
+.filters { display: flex; gap: 0.35rem; overflow-x: auto; padding-bottom: 0.4rem; margin-bottom: 0.5rem; -webkit-overflow-scrolling: touch; }
 .filter-chip { background: #e8f0f5; border: none; padding: 0.32rem 0.7rem; border-radius: 16px; font-size: 0.72rem; white-space: nowrap; }
 .filter-chip.active { background: #1a5f7a; color: white; }
 details { background: white; border-radius: 12px; margin-bottom: 0.65rem; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
@@ -36,15 +39,16 @@ a { color: #1a5f7a; }
   <button class="tab" data-section="selection">Sélection</button>
   <button class="tab" data-section="schools">Écoles</button>
 </div>
+
 <div id="overview" class="section active">
   <div class="card">
     <h2>Les écoles d’ingénieurs post-Bac CTI</h2>
-    <p>Environ 100 écoles délivrent un diplôme d’ingénieur habilité CTI accessible directement après le bac (5 ans). Toutes les écoles de cette application sont habilitées CTI.</p>
+    <p>Environ 100 écoles délivrent un diplôme d’ingénieur habilité par la CTI accessible directement après le bac, en 5 ans (prépa intégrée + cycle ingénieur). Toutes les écoles de cette application sont habilitées CTI.</p>
   </div>
   <div class="card">
     <h2>Principaux réseaux / concours</h2>
     <ul>
-      <li><strong>INSA</strong> (7 écoles)</li>
+      <li><strong>INSA</strong> (7 écoles) – très sélectives</li>
       <li><strong>Universités de Technologie</strong> (UTC, UTT, UTBM)</li>
       <li><strong>Geipi Polytech</strong> (~35 écoles publiques)</li>
       <li><strong>Puissance Alpha</strong></li>
@@ -57,6 +61,7 @@ a { color: #1a5f7a; }
     <p>Les écoles généralistes et celles avec spécialités biotechnologies, chimie, agroalimentaire, environnement ou sciences du vivant accueillent très bien ce profil.</p>
   </div>
 </div>
+
 <div id="selection" class="section">
   <div class="card">
     <h2>Parcoursup & Concours</h2>
@@ -64,22 +69,26 @@ a { color: #1a5f7a; }
     <ul>
       <li>Procédure INSA</li>
       <li>Geipi Polytech</li>
-      <li>Avenir</li>
+      <li>Avenir (ESILV, ECE, EPF…)</li>
       <li>Puissance Alpha</li>
-      <li>Advance</li>
+      <li>Advance (EPITA, SupBiotech…)</li>
     </ul>
   </div>
   <div class="card">
     <h2>Roadmap indicative (Terminale)</h2>
     <ul>
-      <li>Janvier : ouverture Parcoursup + vœux</li>
-      <li>Mars : confirmation des vœux</li>
-      <li>Avril-Mai : épreuves selon concours</li>
-      <li>Juin-Juillet : propositions et réponses</li>
+      <li><strong>Janvier</strong> : ouverture Parcoursup + formulation des vœux</li>
+      <li><strong>Mars</strong> : confirmation des vœux</li>
+      <li><strong>Avril-Mai</strong> : épreuves selon les concours</li>
+      <li><strong>Juin-Juillet</strong> : propositions et réponses définitives</li>
     </ul>
   </div>
 </div>
+
 <div id="schools" class="section">
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Rechercher école, ville, spécialité…">
+  </div>
   <div class="filters" id="net-filters">
     <button class="filter-chip active" data-filter="all">Tous concours</button>
     <button class="filter-chip" data-filter="INSA">INSA</button>
@@ -92,38 +101,40 @@ a { color: #1a5f7a; }
   <div class="filters" id="spec-filters">
     <button class="filter-chip active" data-spec="all">Toutes spécialités</button>
     <button class="filter-chip" data-spec="bio">Bio / Agro / SVT</button>
+    <button class="filter-chip" data-spec="chimie">Chimie</button>
     <button class="filter-chip" data-spec="info">Informatique</button>
     <button class="filter-chip" data-spec="meca">Mécanique / Génie civil</button>
+    <button class="filter-chip" data-spec="elec">Électronique / Énergie</button>
   </div>
   <div id="schools-list"></div>
 </div>
+
 <script>
-const schools = [
-  {"n":"INSA Lyon","f":"Institut National des Sciences Appliquées de Lyon","c":"Lyon","net":"INSA","sp":"Biosciences, Informatique, Génie civil","w":"https://www.insa-lyon.fr"},
-  {"n":"INSA Toulouse","f":"Institut National des Sciences Appliquées de Toulouse","c":"Toulouse","net":"INSA","sp":"Génie civil, Informatique","w":"https://www.insa-toulouse.fr"},
-  {"n":"UTC","f":"Université de Technologie de Compiègne","c":"Compiègne","net":"UT","sp":"Génie biologique, Informatique","w":"https://www.utc.fr"},
-  {"n":"UTT","f":"Université de Technologie de Troyes","c":"Troyes","net":"UT","sp":"Informatique, Matériaux","w":"https://www.utt.fr"},
-  {"n":"UTBM","f":"Université de Technologie de Belfort-Montbéliard","c":"Belfort","net":"UT","sp":"Informatique, Énergie","w":"https://www.utbm.fr"},
-  {"n":"Polytech Paris-Saclay","f":"École polytechnique de l'Université Paris-Saclay","c":"Paris","net":"Geipi Polytech","sp":"Informatique, Matériaux","w":"https://www.polytech.universite-paris-saclay.fr"},
-  {"n":"Polytech Montpellier","f":"Polytech Montpellier","c":"Montpellier","net":"Geipi Polytech","sp":"Informatique, Eau et génie civil","w":"https://www.polytech.umontpellier.fr"},
-  {"n":"ESILV","f":"École Supérieure d'Ingénieurs Léonard de Vinci","c":"Paris","net":"Avenir","sp":"Informatique, Finance","w":"https://www.esilv.fr"},
-  {"n":"EPITA","f":"École Pour l'Informatique et les Techniques Avancées","c":"Paris","net":"Advance","sp":"Informatique, Cybersécurité","w":"https://www.epita.fr"}
-];
+const schools = [{"n": "INSA Lyon", "f": "Institut National des Sciences Appliquées de Lyon", "c": "Villeurbanne", "a": "20 Avenue Albert Einstein, 69100 Villeurbanne", "net": "INSA", "sp": "Génie mécanique, électrique, civil, informatique, biosciences, matériaux, énergie...", "no": "Plus grande et la plus sélective. Excellent classement post-bac. | Insertion : ~80% CDI à 6 mois, salaire médian ~38-40 ", "w": "https://www.insa-lyon.fr"}, {"n": "INSA Toulouse", "f": "Institut National des Sciences Appliquées de Toulouse", "c": "Toulouse", "a": "135 Avenue de Rangueil, 31400 Toulouse", "net": "INSA", "sp": "Génie civil, mécanique, informatique, biosciences...", "no": "Écosystème aéro fort. | Fort écosystème aéro (Airbus et sous-traitants). Très bonne insertion industrie et R&D. Mobilité", "w": "https://www.insa-toulouse.fr"}, {"n": "INSA Rennes", "f": "Institut National des Sciences Appliquées de Rennes", "c": "Rennes", "a": "20 Avenue des Buttes de Coësmes, 35700 Rennes", "net": "INSA", "sp": "Informatique, électronique, génie civil, matériaux...", "no": "Forte en informatique.", "w": "https://www.insa-rennes.fr"}, {"n": "INSA Strasbourg", "f": "Institut National des Sciences Appliquées de Strasbourg", "c": "Strasbourg", "a": "24 Boulevard de la Victoire, 67000 Strasbourg", "net": "INSA", "sp": "Génie civil, architecture (double diplôme), mécanique...", "no": "Double diplôme architecte.", "w": ""}, {"n": "INSA Rouen Normandie", "f": "Institut National des Sciences Appliquées de Rouen Normandie", "c": "Saint-Étienne-du-Rouvray", "a": "685 Avenue de l'Université, 76800 Saint-Étienne-du-Rouvray", "net": "INSA", "sp": "Génie chimique, mécanique, informatique...", "no": "", "w": ""}, {"n": "INSA Centre Val de Loire", "f": "Institut National des Sciences Appliquées Centre Val de Loire", "c": "Blois / Bourges", "a": "3 Rue de la Chocolaterie, 41034 Blois", "net": "INSA", "sp": "Systèmes industriels, risques, informatique, paysage", "no": "Sites multiples.", "w": ""}, {"n": "INSA Hauts-de-France", "f": "Institut National des Sciences Appliquées Hauts-de-France", "c": "Valenciennes", "a": "Campus du Mont Houy, 59313 Valenciennes", "net": "INSA", "sp": "Mécanique, informatique, génie civil...", "no": "", "w": ""}, {"n": "UTC", "f": "Université de Technologie de Compiègne", "c": "Compiègne", "a": "Centre Benjamin Franklin, Rue Roger Couttolenc, 60203 Compiègne", "net": "UT", "sp": "Génie biologique, informatique, mécanique, urbain...", "no": "Très bon classement. Pédagogie par projets. | Excellente insertion. Pédagogie innovante. Fort réseau d'entreprises indus", "w": "https://www.utc.fr"}, {"n": "UTT", "f": "Université de Technologie de Troyes", "c": "Troyes", "a": "12 Rue Marie Curie, 10300 Troyes", "net": "UT", "sp": "Matériaux, informatique, systèmes industriels...", "no": "", "w": "https://www.utt.fr"}, {"n": "UTBM", "f": "Université de Technologie de Belfort-Montbéliard", "c": "Belfort / Montbéliard", "a": "Rue de Leupe, 90400 Sevenans", "net": "UT", "sp": "Mécanique, énergétique, informatique, design...", "no": "Liens industrie auto.", "w": "https://www.utbm.fr"}, {"n": "Polytech Angers", "f": "École polytechnique de l'Université d'Angers", "c": "Angers", "a": "2 Boulevard Lavoisier, 49045 Angers", "net": "Geipi Polytech", "sp": "Génie biologique, bâtiment, informatique, qualité", "no": "Universitaire. Filière BIO SVT.", "w": ""}, {"n": "Polytech Annecy-Chambéry", "f": "École polytechnique de l'Université Savoie Mont Blanc", "c": "Annecy / Chambéry", "a": "5 Chemin de Bellevue, 74940 Annecy-le-Vieux", "net": "Geipi Polytech", "sp": "Mécanique, matériaux, environnement, informatique", "no": "", "w": ""}, {"n": "Polytech Clermont", "f": "École polytechnique de l'Université Clermont Auvergne", "c": "Clermont-Ferrand", "a": "Campus des Cézeaux, 63170 Aubière", "net": "Geipi Polytech", "sp": "Génie biologique, civil, électrique, data...", "no": "Filière BIO.", "w": ""}, {"n": "Polytech Dijon", "f": "École polytechnique de l'Université de Bourgogne", "c": "Dijon", "a": "9 Avenue Alain Savary, 21000 Dijon", "net": "Geipi Polytech", "sp": "Informatique, robotique, agroalimentaire...", "no": "", "w": ""}, {"n": "Polytech Grenoble", "f": "École polytechnique de l'Université Grenoble Alpes / Grenoble INP", "c": "Grenoble", "a": "14 Place du Conseil National de la Résistance, 38400 Saint-Martin-d'Hères", "net": "Geipi Polytech", "sp": "Informatique, électronique, géotechnique, matériaux", "no": "Écosystème Grenoble.", "w": ""}, {"n": "Polytech Lille", "f": "École polytechnique de l'Université de Lille", "c": "Villeneuve-d'Ascq", "a": "Cité Scientifique, 59650 Villeneuve-d'Ascq", "net": "Geipi Polytech", "sp": "Informatique, mécanique, matériaux, génie biologique", "no": "Grande Polytech.", "w": ""}, {"n": "Polytech Lyon", "f": "École polytechnique de l'Université Claude Bernard Lyon 1", "c": "Villeurbanne", "a": "Domaine Scientifique de la Doua, 69100 Villeurbanne", "net": "Geipi Polytech", "sp": "Informatique, matériaux, biomédical...", "no": "", "w": ""}, {"n": "Polytech Marseille", "f": "École polytechnique d'Aix-Marseille Université", "c": "Marseille", "a": "163 Avenue de Luminy, 13288 Marseille", "net": "Geipi Polytech", "sp": "Informatique, mécanique, génie industriel...", "no": "Plus grande en places.", "w": ""}, {"n": "Polytech Montpellier", "f": "École polytechnique de l'Université de Montpellier", "c": "Montpellier", "a": "Place Eugène Bataillon, 34095 Montpellier", "net": "Geipi Polytech", "sp": "Informatique, matériaux, eau, génie biologique", "no": "Filière BIO.", "w": ""}, {"n": "Polytech Nancy", "f": "École polytechnique de l'Université de Lorraine", "c": "Nancy", "a": "2 Rue Jean Lamour, 54519 Vandœuvre-lès-Nancy", "net": "Geipi Polytech", "sp": "Informatique, automatique, robotique, matériaux", "no": "", "w": ""}, {"n": "Polytech Nantes", "f": "École polytechnique de Nantes Université", "c": "Nantes", "a": "Rue Christian Pauc, 44300 Nantes", "net": "Geipi Polytech", "sp": "Informatique, électronique, thermique...", "no": "", "w": ""}, {"n": "Polytech Nice Sophia", "f": "École polytechnique de l'Université Côte d'Azur", "c": "Sophia Antipolis / Nice", "a": "930 Route des Colles, 06410 Biot", "net": "Geipi Polytech", "sp": "Informatique, électronique, génie biologique", "no": "Écosystème Sophia.", "w": ""}, {"n": "Polytech Orléans", "f": "École polytechnique de l'Université d'Orléans", "c": "Orléans", "a": "8 Rue Léonard de Vinci, 45100 Orléans", "net": "Geipi Polytech", "sp": "Génie civil, mécanique, électronique...", "no": "", "w": ""}, {"n": "Polytech Paris-Saclay", "f": "École polytechnique de l'Université Paris-Saclay", "c": "Orsay", "a": "Bâtiment 620, Rue Louis de Broglie, 91405 Orsay", "net": "Geipi Polytech", "sp": "Électronique, informatique, matériaux...", "no": "Université Paris-Saclay. | Insertion >70% à 6 mois. Mobilité internationale obligatoire (9-17 semaines). 5 doubles diplô", "w": ""}, {"n": "Polytech Sorbonne", "f": "École polytechnique de Sorbonne Université", "c": "Paris", "a": "4 Place Jussieu, 75005 Paris", "net": "Geipi Polytech", "sp": "Agroalimentaire, robotique, matériaux, maths-info", "no": "Paris. Filière BIO.", "w": ""}, {"n": "Polytech Tours", "f": "École polytechnique de l'Université de Tours", "c": "Tours", "a": "35 Allée Ferdinand de Lesseps, 37200 Tours", "net": "Geipi Polytech", "sp": "Informatique, électronique, mécanique...", "no": "", "w": ""}, {"n": "ENIB", "f": "École Nationale d'Ingénieurs de Brest (Bretagne INP)", "c": "Brest", "a": "945 Avenue du Technopôle, 29280 Plouzané", "net": "Geipi Polytech", "sp": "Électronique, informatique, mécatronique", "no": "", "w": ""}, {"n": "ENIM", "f": "École Nationale d'Ingénieurs de Metz", "c": "Metz", "a": "1 Route d'Ars Laquenexy, 57078 Metz", "net": "Geipi Polytech", "sp": "Génie mécanique, production, matériaux", "no": "", "w": ""}, {"n": "ENIT", "f": "École Nationale d'Ingénieurs de Tarbes (Toulouse INP)", "c": "Tarbes", "a": "47 Avenue d'Azereix, 65000 Tarbes", "net": "Geipi Polytech", "sp": "Génie mécanique, électrique, industriel", "no": "", "w": ""}, {"n": "ENISE", "f": "Centrale Lyon ENISE", "c": "Saint-Étienne", "a": "58 Rue Jean Parot, 42100 Saint-Étienne", "net": "Geipi Polytech", "sp": "Génie civil, mécanique, physique", "no": "", "w": ""}, {"n": "EEIGM", "f": "École Européenne d'Ingénieurs en Génie des Matériaux (Lorraine INP)", "c": "Nancy", "a": "6 Rue Bastien-Lepage, 54000 Nancy", "net": "Geipi Polytech", "sp": "Matériaux, cursus européen", "no": "", "w": ""}, {"n": "ENSGSI", "f": "École Nationale Supérieure en Génie des Systèmes et de l'Innovation", "c": "Nancy", "a": "8 Rue Bastien-Lepage, 54000 Nancy", "net": "Geipi Polytech", "sp": "Génie des systèmes, innovation", "no": "", "w": ""}, {"n": "ENSIBS", "f": "École Nationale Supérieure d'Ingénieurs de Bretagne Sud", "c": "Lorient / Vannes", "a": "17 Boulevard Flandres Dunkerque 1940, 56100 Lorient", "net": "Geipi Polytech", "sp": "Mécatronique, cyberdéfense, génie industriel", "no": "", "w": ""}, {"n": "ENSIM", "f": "École Nationale Supérieure d'Ingénieurs du Mans", "c": "Le Mans", "a": "1 Rue Aristote, 72000 Le Mans", "net": "Geipi Polytech", "sp": "Acoustique, vibrations, capteurs", "no": "", "w": ""}, {"n": "ESGT", "f": "École Supérieure des Géomètres et Topographes", "c": "Le Mans", "a": "1 Boulevard Pythagore, 72000 Le Mans", "net": "Geipi Polytech", "sp": "Géomatique, topographie", "no": "", "w": ""}, {"n": "ESIR", "f": "École Supérieure d'Ingénieurs de Rennes", "c": "Rennes", "a": "263 Avenue Général Leclerc, 35042 Rennes", "net": "Geipi Polytech", "sp": "Informatique, matériaux, systèmes numériques", "no": "Université de Rennes.", "w": ""}, {"n": "ESIROI", "f": "École Supérieure d'Ingénieurs Réunion Océan Indien", "c": "La Réunion", "a": "40 Avenue de Soweto, 97410 Saint-Pierre, Réunion", "net": "Geipi Polytech", "sp": "Agroalimentaire, bâtiment, informatique", "no": "Filière BIO.", "w": ""}, {"n": "Esisar", "f": "Grenoble INP – Esisar", "c": "Valence", "a": "50 Rue Barthélémy de Laffemas, 26000 Valence", "net": "Geipi Polytech", "sp": "Systèmes embarqués, électronique", "no": "", "w": ""}, {"n": "IMT Nord Europe", "f": "IMT Nord Europe", "c": "Lille / Douai", "a": "941 Rue Charles Bourseul, 59500 Douai", "net": "Geipi Polytech", "sp": "Énergie, environnement, matériaux, numérique", "no": "", "w": ""}, {"n": "ISAT", "f": "Institut Supérieur de l'Automobile et des Transports", "c": "Nevers", "a": "49 Rue Mademoiselle Bourgeois, 58027 Nevers", "net": "Geipi Polytech", "sp": "Automobile, transports", "no": "", "w": ""}, {"n": "ISEL", "f": "Institut Supérieur d'Études Logistiques", "c": "Le Havre", "a": "11 Quai Frissard, 76600 Le Havre", "net": "Geipi Polytech", "sp": "Logistique, génie industriel", "no": "", "w": ""}, {"n": "ISTY", "f": "Institut des Sciences et Techniques de Yvelines (UVSQ)", "c": "Versailles / Paris-Saclay", "a": "10-12 Avenue de l'Europe, 78140 Vélizy-Villacoublay", "net": "Geipi Polytech", "sp": "Mécatronique, systèmes", "no": "", "w": ""}, {"n": "Institut Agro Dijon", "f": "L'Institut Agro Dijon", "c": "Dijon", "a": "26 Boulevard Docteur Petitjean, 21079 Dijon", "net": "Geipi Polytech", "sp": "Agronomie, agroalimentaire", "no": "Filière BIO importante.", "w": "https://www.institut-agro.fr/dijon"}, {"n": "Sup Galilée", "f": "Institut Galilée – Université Sorbonne Paris Nord", "c": "Villetaneuse", "a": "99 Avenue Jean Baptiste Clément, 93430 Villetaneuse", "net": "Geipi Polytech", "sp": "Informatique, énergétique, matériaux", "no": "Universitaire.", "w": ""}, {"n": "Télécom Saint-Étienne", "f": "Télécom Saint-Étienne – Université Jean Monnet", "c": "Saint-Étienne", "a": "25 Rue Docteur Rémy Annino, 42000 Saint-Étienne", "net": "Geipi Polytech", "sp": "Télécoms, informatique, électronique", "no": "Universitaire.", "w": ""}, {"n": "ECE", "f": "ECE – École d'Ingénieurs du Numérique", "c": "Paris, Lyon, Bordeaux, Rennes, Marseille", "a": "10 Rue Sextius Michel, 75015 Paris", "net": "Concours Avenir", "sp": "Numérique, IA, cybersécurité, systèmes embarqués, data", "no": "Privée. Forte en numérique. | Salaire sortie ~38 k€. Employeurs : Thales, Orange, Sopra Steria, Capgemini, Bouygues Tele", "w": ""}, {"n": "EIGSI", "f": "EIGSI – École d'Ingénieurs Généralistes", "c": "La Rochelle, Casablanca", "a": "26 Rue François de Vaux de Foletier, 17041 La Rochelle", "net": "Concours Avenir", "sp": "Généraliste, énergie, mobilités, mécanique", "no": "", "w": ""}, {"n": "EPF", "f": "EPF – École d'Ingénieurs", "c": "Cachan, Montpellier, Troyes, Saint-Nazaire", "a": "55 Avenue du Président Wilson, 94230 Cachan", "net": "Concours Avenir", "sp": "Généraliste, international, énergie, numérique", "no": "Anciennement féminine.", "w": "https://www.epf.fr"}, {"n": "ESIGELEC", "f": "ESIGELEC", "c": "Rouen, Poitiers", "a": "Technopôle du Madrillet, Avenue Galilée, 76800 Saint-Étienne-du-Rouvray", "net": "Concours Avenir", "sp": "Électronique, systèmes embarqués, énergie", "no": "", "w": ""}, {"n": "ESILV", "f": "ESILV – École Supérieure d'Ingénieurs Léonard de Vinci", "c": "Paris-La Défense, Nantes, Montpellier", "a": "29 Allée Le Corbusier, 92000 Nanterre", "net": "Concours Avenir", "sp": "Numérique, data, finance quantitative, mécanique", "no": "Forte en maths/finance. | Salaire moyen ~47 700 € (primes). 85% CDI, 20% à l'étranger. Employeurs : Vinci, Safran, Socié", "w": "https://www.esilv.fr"}, {"n": "ESTACA", "f": "ESTACA", "c": "Paris-Saclay, Laval, Bordeaux", "a": "12 Avenue Paul Delouvrier, 78180 Montigny-le-Bretonneux", "net": "Concours Avenir", "sp": "Aéronautique, automobile, ferroviaire, spatial", "no": "Spécialisée mobilité.", "w": "https://www.estaca.fr"}, {"n": "BUILDERS", "f": "BUILDERS École d'Ingénieurs (ex-ESITC Caen)", "c": "Caen, Lyon", "a": "1 Rue Pierre et Marie Curie, 14610 Épron", "net": "Concours Avenir", "sp": "Bâtiment, travaux publics, génie civil, construction durable", "no": "", "w": ""}, {"n": "EBI", "f": "EBI – École de Biologie Industrielle", "c": "Cergy, Dijon", "a": "49 Avenue des Genottes, 95800 Cergy", "net": "Concours Avenir", "sp": "Biotechnologies, bio-industries, cosmétique, agroalimentaire", "no": "Intéressante pour SVT. Intégrée récemment.", "w": "https://www.ebi-edu.com"}, {"n": "ESIEE Paris", "f": "ESIEE Paris", "c": "Noisy-le-Grand", "a": "Cité Descartes, 2 Boulevard Blaise Pascal, 93160 Noisy-le-Grand", "net": "Puissance Alpha", "sp": "Électronique, informatique, systèmes embarqués, IA", "no": "Bonne réputation.", "w": "https://www.esiee.fr"}, {"n": "CPE Lyon", "f": "CPE Lyon", "c": "Lyon / Villeurbanne", "a": "Campus Lyontech, 3 Rue Victor Grignard, 69100 Villeurbanne", "net": "Puissance Alpha", "sp": "Chimie, biotechnologies, électronique, IA", "no": "Intéressante SVT/chimie.", "w": "https://www.cpe.fr"}, {"n": "ISEP", "f": "ISEP", "c": "Paris, Bordeaux", "a": "28 Rue Notre-Dame des Champs, 75006 Paris", "net": "Puissance Alpha", "sp": "Électronique, numérique, systèmes embarqués", "no": "", "w": ""}, {"n": "EFREI", "f": "EFREI", "c": "Villejuif, Bordeaux", "a": "30-32 Avenue de la République, 94800 Villejuif", "net": "Puissance Alpha", "sp": "Numérique, data, informatique, bio-informatique", "no": "", "w": ""}, {"n": "ESIEA", "f": "ESIEA", "c": "Paris / Ivry, Laval", "a": "4 Allée Katherine Johnson, 94200 Ivry-sur-Seine", "net": "Puissance Alpha", "sp": "Numérique, data, IA, systèmes", "no": "", "w": ""}, {"n": "ESEO", "f": "ESEO", "c": "Angers, Vélizy, Dijon", "a": "10 Boulevard Jean Jeanneteau, 49100 Angers", "net": "Puissance Alpha", "sp": "Informatique, électronique, systèmes embarqués", "no": "", "w": ""}, {"n": "JUNIA", "f": "JUNIA (HEI / ISEN / ISA)", "c": "Lille, Bordeaux, Montpellier...", "a": "2 Rue Norbert Segard, 59014 Lille", "net": "Puissance Alpha", "sp": "Généraliste, électronique, agriculture", "no": "Réseau catholique.", "w": ""}, {"n": "3iL", "f": "3iL Ingénieurs", "c": "Limoges, Rodez, Nantes", "a": "43 Rue de Sainte-Anne, 87000 Limoges", "net": "Puissance Alpha", "sp": "Informatique, numérique", "no": "", "w": ""}, {"n": "ELISA Aerospace", "f": "ELISA Aerospace", "c": "Saint-Quentin, Bordeaux", "a": "48 Rue Raspail, 02100 Saint-Quentin", "net": "Puissance Alpha", "sp": "Aéronautique, spatial", "no": "", "w": ""}, {"n": "ESTBB", "f": "ESTBB", "c": "Lyon", "a": "10 Place des Archives, 69002 Lyon", "net": "Puissance Alpha", "sp": "Biotechnologies", "no": "Profils SVT.", "w": ""}, {"n": "ESCOM", "f": "ESCOM Chimie", "c": "Compiègne", "a": "1 Allée du Réseau Jean Marie Buckmaster, 60200 Compiègne", "net": "Puissance Alpha", "sp": "Chimie, bio-industries", "no": "", "w": "https://www.escom.fr"}, {"n": "ESAIP", "f": "ESAIP", "c": "Angers, Aix-en-Provence", "a": "18 Rue du 8 Mai 1945, 49124 Saint-Barthélemy-d'Anjou", "net": "Puissance Alpha", "sp": "Numérique, environnement, risques", "no": "", "w": ""}, {"n": "ESTIA", "f": "ESTIA", "c": "Bidart", "a": "Technopole Izarbel, 90 Allée Fauste d’Elhuyar, 64210 Bidart", "net": "Puissance Alpha", "sp": "Systèmes embarqués, mécanique, numérique", "no": "", "w": ""}, {"n": "ISEN Méditerranée", "f": "ISEN Méditerranée", "c": "Toulon, Marseille", "a": "Place Georges Pompidou, 83000 Toulon", "net": "Puissance Alpha", "sp": "Électronique, numérique", "no": "", "w": ""}, {"n": "ISEN Ouest", "f": "ISEN Ouest", "c": "Brest, Caen, Nantes, Paris, Rennes", "a": "20 Rue Cuirassé Bretagne, 29200 Brest", "net": "Puissance Alpha", "sp": "Électronique, numérique", "no": "", "w": ""}, {"n": "ESITC Metz / Paris", "f": "ESITC", "c": "Metz / Arcueil", "a": "6 Rue Marconi, 57070 Metz", "net": "Puissance Alpha", "sp": "BTP, génie civil", "no": "", "w": ""}, {"n": "EPITA", "f": "EPITA – École Pour l'Informatique et les Techniques Avancées", "c": "Paris (Kremlin-Bicêtre), Lyon, Toulouse, Rennes, Strasbourg...", "a": "14-16 Rue Voltaire, 94270 Le Kremlin-Bicêtre", "net": "Concours Advance", "sp": "Informatique, IA, cybersécurité, data, systèmes", "no": "Très orientée code/projets. Bon classement. | 98% emploi <2 mois, salaire médian ~47 200 € (60 k€ international). Employ", "w": "https://www.epita.fr"}, {"n": "ESME", "f": "ESME – École d'Ingénieurs", "c": "Paris, Lyon, Bordeaux, Lille", "a": "38 Rue Molière, 94200 Ivry-sur-Seine", "net": "Concours Advance", "sp": "Généraliste, numérique, robotique, énergie", "no": "Généraliste IONIS.", "w": ""}, {"n": "IPSA", "f": "IPSA – Institut Polytechnique des Sciences Avancées", "c": "Paris (Ivry), Toulouse, Lyon", "a": "63 Boulevard de Brandebourg, 94200 Ivry-sur-Seine", "net": "Concours Advance", "sp": "Aéronautique, spatial, mobilités, systèmes embarqués", "no": "Spécialisée air/espace.", "w": ""}, {"n": "SupBiotech", "f": "SupBiotech", "c": "Villejuif (Paris), Lyon", "a": "66 Rue Guy Môquet, 94800 Villejuif", "net": "Concours Advance", "sp": "Biotechnologies, santé, agroalimentaire, cosmétique", "no": "Très adaptée profils SVT. | 95% emploi <6 mois. Secteurs : santé, pharma, agro, cosméto, bio-informatique. 115 partenair", "w": ""}, {"n": "CESI", "f": "CESI École d'Ingénieurs", "c": "Nanterre + nombreux campus France", "a": "93 Boulevard de la Seine, 92000 Nanterre", "net": "Autres réseaux et écoles", "sp": "Informatique, BTP, industrie, systèmes", "no": "Réseau fort, apprentissage possible. Dossier + entretien.", "w": ""}, {"n": "ICAM", "f": "ICAM – Institut Catholique d'Arts et Métiers", "c": "Lille, Nantes, Toulouse, Strasbourg, etc.", "a": "6 Rue Auber, 59800 Lille", "net": "Autres réseaux et écoles", "sp": "Généraliste, mécanique, industrie, humaniste", "no": "Réseau multi-sites. Dossier + entretiens.", "w": ""}, {"n": "CY Tech", "f": "CY Tech – Graduate School of Engineering (ex-EISTI)", "c": "Cergy, Pau", "a": "Avenue du Parc, 95000 Cergy", "net": "Autres réseaux et écoles", "sp": "Informatique, maths appliquées, biotech & chimie, génie civil", "no": "Universitaire (CY Cergy). Concours GalaxY. Doubles diplômes. Intéressante SVT.", "w": ""}, {"n": "ECAM LaSalle", "f": "ECAM LaSalle", "c": "Lyon + partenaires", "a": "40 Montée Saint-Barthélémy, 69321 Lyon", "net": "Autres réseaux et écoles", "sp": "Généraliste, mécanique, énergie, numérique", "no": "Dossier + entretien collectif.", "w": ""}, {"n": "ECAM Louis de Broglie", "f": "ECAM Louis de Broglie", "c": "Bruz (près Rennes)", "a": "Campus de Ker-Lann, 2 Centre Antoine de Saint-Exupéry, 35170 Bruz", "net": "Autres réseaux et écoles", "sp": "Généraliste, numérique, industrie", "no": "", "w": ""}, {"n": "ECAM-EPMI", "f": "ECAM-EPMI", "c": "Cergy, Cachan, Grasse", "a": "13 Boulevard de l'Hautil, 95000 Cergy", "net": "Autres réseaux et écoles", "sp": "Énergie, systèmes, mécanique", "no": "", "w": ""}, {"n": "UniLaSalle", "f": "UniLaSalle", "c": "Beauvais, Rouen, etc.", "a": "19 Rue Pierre Waguet, 60000 Beauvais", "net": "Autres réseaux et écoles", "sp": "Agronomie, agroalimentaire, géologie, environnement", "no": "Profils SVT/agro.", "w": ""}, {"n": "ESA", "f": "ESA – École Supérieure d'Agricultures", "c": "Angers", "a": "55 Rue Rabelais, 49000 Angers", "net": "Autres réseaux et écoles", "sp": "Agronomie, agroalimentaire", "no": "", "w": ""}, {"n": "EIL Côte d'Opale", "f": "École d'Ingénieurs du Littoral Côte d'Opale", "c": "Calais / Dunkerque", "a": "50 Rue Ferdinand Buisson, 62228 Calais", "net": "Autres réseaux et écoles", "sp": "Génie industriel, énergétique", "no": "Universitaire.", "w": ""}];
 let currentNet = "all";
 let currentSpec = "all";
+let currentSearch = "";
+
 function matchesSpec(s, spec) {
   if (spec === "all") return true;
-  const t = (s.sp || "").toLowerCase();
-  if (spec === "bio") return t.includes("bio");
-  if (spec === "info") return t.includes("info") || t.includes("informatique");
-  if (spec === "meca") return t.includes("mécanique") || t.includes("civil");
+  const t = ((s.sp || "") + " " + (s.no || "")).toLowerCase();
+  if (spec === "bio") return t.includes("bio") || t.includes("agro") || t.includes("vivant") || t.includes("environnement");
+  if (spec === "chimie") return t.includes("chimie");
+  if (spec === "info") return t.includes("info") || t.includes("informatique") || t.includes("numérique");
+  if (spec === "meca") return t.includes("mécanique") || t.includes("mecanique") || t.includes("génie civil") || t.includes("genie civil");
+  if (spec === "elec") return t.includes("électr") || t.includes("electr") || t.includes("énergie");
   return true;
 }
+
 function render() {
   const list = document.getElementById("schools-list");
   const filtered = schools.filter(s => {
     if (currentNet !== "all" && s.net !== currentNet) return false;
     if (!matchesSpec(s, currentSpec)) return false;
+    if (currentSearch) {
+      const hay = (s.n + " " + s.f + " " + s.c + " " + (s.sp || "")).toLowerCase();
+      if (!hay.includes(currentSearch.toLowerCase())) return false;
+    }
     return true;
   });
   list.innerHTML = filtered.map(s => `
@@ -131,12 +142,15 @@ function render() {
       <summary>${s.n}<div class="meta">${s.c} • ${s.net}</div></summary>
       <div class="details-content">
         <p><strong>Nom complet :</strong> ${s.f}</p>
-        <p><strong>Spécialités :</strong> ${s.sp}</p>
+        <p><strong>Adresse :</strong> ${s.a || "-"}</p>
+        <p><strong>Spécialités :</strong> ${s.sp || "-"}</p>
+        <p><strong>Notes :</strong> ${s.no || "-"}</p>
         ${s.w ? `<p><strong>Site :</strong> <a href="${s.w}" target="_blank">${s.w}</a></p>` : ""}
       </div>
     </details>
-  `).join("") || "<p>Aucune école.</p>";
+  `).join("") || "<p>Aucune école ne correspond aux filtres.</p>";
 }
+
 document.querySelectorAll("#net-filters .filter-chip").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll("#net-filters .filter-chip").forEach(b => b.classList.remove("active"));
@@ -152,6 +166,10 @@ document.querySelectorAll("#spec-filters .filter-chip").forEach(btn => {
     currentSpec = btn.dataset.spec;
     render();
   });
+});
+document.getElementById("search").addEventListener("input", e => {
+  currentSearch = e.target.value;
+  render();
 });
 document.querySelectorAll(".tab").forEach(btn => {
   btn.addEventListener("click", () => {
